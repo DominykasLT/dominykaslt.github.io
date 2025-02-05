@@ -1,7 +1,111 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+  <hr>
+
+  <section id="original-cases">
+    <h2>Original Provided Cases</h2>
+    <h3>Case 1: Escaped Script Tag (test1)</h3>
+    <p>This example shows a script tag rendered as text (i.e. escaped) so it does not execute.</p>
+    <pre class="prettyprint notranslate prettyprinted">
+&lt;script&gt;
+ alert("test1");
+&lt;/script&gt;
+    </pre>
+
+    <h3>Case 2: Template Injection Style (test2)</h3>
+    <p>This example shows a script tag inside curly braces. If the system simply renders HTML, the tags may be interpreted.</p>
+    <pre>
+{&lt;script&gt;alert("test2");&lt;/script&gt;}
+    </pre>
+
+    <h3>Case 3: Unescaped Script Tag (test3)</h3>
+    <p>This is a plain script tag that, if inserted unsafely into a page, would execute immediately.</p>
+    <pre>
+&lt;script&gt;
+ alert("test3");
+&lt;/script&gt;
+    </pre>
+  </section>
+
+  <hr>
+
+  <section id="additional-xss">
+    <h2>Additional XSS Vectors</h2>
+
+    <section id="unescaped-script">
+      <h3>1. Unescaped Script Injection</h3>
+      <p>This is a direct insertion of a script tag. In a vulnerable context it would run immediately.</p>
+      <pre>
+&lt;script&gt;
+ alert("XSS via unescaped script");
+&lt;/script&gt;
+      </pre>
+      <p><em>Note:</em> On this demo page it is shown as code only.</p>
+    </section>
+
+
+    <section id="anchor-js">
+      <h3>3. Anchor Tag with JavaScript URI</h3>
+      <p>An attacker might use a link whose <code>href</code> starts with <code>javascript:</code> to execute code when clicked.</p>
+      <pre>
+&lt;a href="javascript:alert('XSS via JS URI');"&gt;Click me&lt;/a&gt;
+      </pre>
+      <p>Demo: <a href="javascript:alert('XSS via JS URI');">Click me</a></p>
+    </section>
+
+
+
+    <section id="div-onclick">
+      <h3>5. Inline Event on a Div</h3>
+      <p>This example uses an inline <code>onclick</code> event on a non-standard element (here, a div) to trigger JavaScript.</p>
+      <pre>
+&lt;div onclick="alert('XSS via onclick');" style="cursor: pointer;"&gt;
+  Click me to trigger alert
+&lt;/div&gt;
+      </pre>
+      <p>
+        Demo: 
+        <div onclick="alert('XSS via onclick');" style="cursor: pointer; display: inline-block; padding: 5px; border: 1px solid #000;">
+          Click me to trigger alert
+        </div>
+      </p>
+    </section>
+
+    <section id="iframe-js">
+      <h3>6. &lt;iframe&gt; with JavaScript URI</h3>
+      <p>An iframe whose source is a javascript URI is another potential (though less common) vector:</p>
+      <pre>
+&lt;iframe src="javascript:alert('XSS via iframe');"&gt;&lt;/iframe&gt;
+      </pre>
+      <p><em>Note:</em> Many modern browsers restrict this usage.</p>
+    </section>
+
+    <section id="object-data">
+      <h3>7. &lt;object&gt; Tag with Data URI</h3>
+      <p>This example uses a data URI to inject a base64‐encoded HTML snippet that contains a script.</p>
+      <pre>
+&lt;object data="data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4="&gt;&lt;/object&gt;
+      </pre>
+      <p>The base64 string above decodes to: <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code></p>
+    </section>
+
+    <section id="meta-refresh">
+      <h3>8. &lt;meta&gt; Tag Refresh</h3>
+      <p>In some scenarios, a meta tag can be used to redirect to a javascript URI:</p>
+      <pre>
+&lt;meta http-equiv="refresh" content="0;url=javascript:alert('XSS via meta');"&gt;
+      </pre>
+      <p><em>Warning:</em> This rarely works on modern browsers but illustrates the concept.</p>
+    </section>
+  </section>
+
+  <hr>
+  <p>These examples illustrate various ways that HTML (or a templating system) might render content unsafely. In practice, preventing XSS requires proper escaping and validation of any untrusted input before it is output to a page.</p>
 </body>
 </html>
