@@ -3,22 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XSS URL Demo</title>
+    <title>Demo</title>
 </head>
 <body>
-    <h1>XSS URL Demo</h1>
-    <p>Click the button below to be redirected with an XSS payload in the URL.</p>
-
-    <button onclick="redirectWithPayload()">Click Me</button>
-
-    <script>
-        function redirectWithPayload() {
-            // Define the XSS payload (HTML-escaped)
-            let payload = '&lt;script&gt; alert("test1"); &lt;/script&gt;';
-            
-            // Redirect to index.html with the payload in the URL
-            window.location.href = window.location.pathname + '?payload=' + encodeURIComponent(payload);
-        }
-    </script>
+    <h1>Demo</h1>
 </body>
 </html>
